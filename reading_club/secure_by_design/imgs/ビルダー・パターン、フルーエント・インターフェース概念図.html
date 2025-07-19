@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ビルダー・パターン概念図</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        
+        .pattern-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .bad-pattern {
+            border-left-color: #e74c3c;
+        }
+        
+        .good-pattern {
+            border-left-color: #27ae60;
+        }
+        
+        .section h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .bad-icon {
+            background: #e74c3c;
+        }
+        
+        .good-icon {
+            background: #27ae60;
+        }
+        
+        .factory-area {
+            background: #ecf0f1;
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .factory-label {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: #ecf0f1;
+            padding: 0 10px;
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+        
+        .car-state {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .car-visual {
+            width: 80px;
+            height: 40px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .incomplete-car {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .incomplete-car::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255,255,255,0.1),
+                rgba(255,255,255,0.1) 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            animation: construction 2s infinite linear;
+        }
+        
+        @keyframes construction {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .complete-car {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+        
+        .hidden-car {
+            background: #95a5a6;
+            color: #fff;
+        }
+        
+        .arrow {
+            font-size: 24px;
+            color: #3498db;
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .customer-area {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .customer-label {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: #e8f5e8;
+            padding: 0 10px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .benefits {
+            background: #f0f8ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .benefits h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .benefit-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .benefit-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 4px solid #3498db;
+        }
+        
+        .code-example {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .code-example .comment {
+            color: #95a5a6;
+        }
+        
+        .code-example .keyword {
+            color: #3498db;
+        }
+        
+        .code-example .string {
+            color: #e67e22;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏗️ ビルダー・パターン概念図</h1>
+        <p style="text-align: center; font-size: 1.1em; color: #7f8c8d; margin-bottom: 40px;">
+            「車が完成するまでその車を見せない」- 作りかけの状態を隠蔽する設計パターン
+        </p>
+        
+        <div class="pattern-comparison">
+            <!-- 悪い例：フルエント・インターフェース -->
+            <div class="section bad-pattern">
+                <h2>
+                    <div class="icon bad-icon">✗</div>
+                    フルエント・インターフェース
+                </h2>
+                <p><strong>問題：作りかけの車が丸見え</strong></p>
+                
+                <div class="factory-area">
+                    <div class="factory-label">🏭 工場内（外から見える）</div>
+                    
+                    <div class="car-state">
+                        <div class="car-visual incomplete-car">車体のみ</div>
+                        <div>
+                            <strong>ステップ 1</strong><br>
+                            車体だけ完成<br>
+                            <span style="color: #e74c3c;">❌ 顧客に見える</span>
+                        </div>
+                    </div>
+                    
+                    <div class="car-state">
+                        <div class="car-visual incomplete-car">エンジン付</div>
+                        <div>
+                            <strong>ステップ 2</strong><br>
+                            エンジン取り付け<br>
+                            <span style="color: #e74c3c;">❌ 顧客に見える</span>
+                        </div>
+                    </div>
+                    
+                    <div class="car-state">
+                        <div class="car-visual incomplete-car">タイヤ付</div>
+                        <div>
+                            <strong>ステップ 3</strong><br>
+                            タイヤ取り付け<br>
+                            <span style="color: #e74c3c;">❌ 顧客に見える</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+<span class="keyword">const</span> car = <span class="keyword">new</span> Car(<span class="string">'sedan'</span>, <span class="string">'4door'</span>)
+  .withEngine(<span class="string">'2.0L'</span>)  <span class="comment">// 未完成車が返される</span>
+  .withTires(<span class="string">'winter'</span>) <span class="comment">// まだ未完成車</span>
+  .build();             <span class="comment">// ようやく完成</span>
+                </div>
+            </div>
+            
+            <!-- 良い例：ビルダー・パターン -->
+            <div class="section good-pattern">
+                <h2>
+                    <div class="icon good-icon">✓</div>
+                    ビルダー・パターン
+                </h2>
+                <p><strong>解決：工場の中は見えない</strong></p>
+                
+                <div class="factory-area">
+                    <div class="factory-label">🏭 工場内（外から見えない）</div>
+                    
+                    <div class="car-state">
+                        <div class="car-visual hidden-car">🔒 非表示</div>
+                        <div>
+                            <strong>ステップ 1</strong><br>
+                            車体だけ完成<br>
+                            <span style="color: #27ae60;">✅ 顧客には見えない</span>
+                        </div>
+                    </div>
+                    
+                    <div class="car-state">
+                        <div class="car-visual hidden-car">🔒 非表示</div>
+                        <div>
+                            <strong>ステップ 2</strong><br>
+                            エンジン取り付け<br>
+                            <span style="color: #27ae60;">✅ 顧客には見えない</span>
+                        </div>
+                    </div>
+                    
+                    <div class="car-state">
+                        <div class="car-visual hidden-car">🔒 非表示</div>
+                        <div>
+                            <strong>ステップ 3</strong><br>
+                            タイヤ取り付け<br>
+                            <span style="color: #27ae60;">✅ 顧客には見えない</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow">⬇️ 完成後に納車</div>
+                
+                <div class="customer-area">
+                    <div class="customer-label">🏠 顧客のもとへ</div>
+                    <div class="car-state">
+                        <div class="car-visual complete-car">完成車</div>
+                        <div>
+                            <strong>納車</strong><br>
+                            完璧に完成した車のみ<br>
+                            <span style="color: #27ae60;">✅ 完成品のみ表示</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+<span class="keyword">const</span> builder = <span class="keyword">new</span> CarBuilder();
+builder.setBody(<span class="string">'sedan'</span>);      <span class="comment">// 戻り値なし</span>
+builder.setEngine(<span class="string">'2.0L'</span>);    <span class="comment">// 戻り値なし</span>
+builder.setTires(<span class="string">'winter'</span>);   <span class="comment">// 戻り値なし</span>
+<span class="keyword">const</span> car = builder.build(); <span class="comment">// 完成車のみ返される</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="benefits">
+            <h3>🎯 ビルダー・パターンの利点</h3>
+            <div class="benefit-list">
+                <div class="benefit-item">
+                    <strong>🔒 カプセル化</strong><br>
+                    作成過程を隠蔽し、完成品のみを公開
+                </div>
+                <div class="benefit-item">
+                    <strong>🛡️ 整合性保証</strong><br>
+                    不完全な状態のオブジェクトが外部に漏れない
+                </div>
+                <div class="benefit-item">
+                    <strong>🎨 複雑な生成ロジック</strong><br>
+                    段階的で複雑な構築プロセスを管理
+                </div>
+                <div class="benefit-item">
+                    <strong>🔄 再利用性</strong><br>
+                    同じビルダーで異なる種類のオブジェクトを構築
+                </div>
+                <div class="benefit-item">
+                    <strong>📝 明確な責任分離</strong><br>
+                    構築ロジックと使用ロジックを分離
+                </div>
+                <div class="benefit-item">
+                    <strong>🧪 テスト容易性</strong><br>
+                    構築過程を独立してテスト可能
+                </div>
+            </div>
+        </div>
+        
+        <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin-top: 30px;">
+            <h4 style="color: #856404; margin-top: 0;">💡 重要なポイント</h4>
+            <p style="color: #856404; margin-bottom: 0;">
+                <strong>フルエント・インターフェース</strong>は「設定の流れ」を重視し、<br>
+                <strong>ビルダー・パターン</strong>は「完成品の品質」を重視します。<br>
+                どちらを選ぶかは、要件と設計思想によって決まります。
+            </p>
+        </div>
+    </div>
+</body>
+</html>
