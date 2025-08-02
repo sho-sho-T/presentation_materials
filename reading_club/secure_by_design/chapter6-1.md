@@ -39,13 +39,22 @@ paginate: true
 ## よくある問題シナリオ
 ### 🚨 現実でよく見る問題
 
-❌ 空の注文オブジェクトが作られる  
-❌ 支払い済み注文が未払いに戻る  
-❌ 存在しない商品IDで注文作成  
-❌ 負の残高を持つ口座  
-❌ 無効な状態遷移  
+❌ **空の注文オブジェクトが作られる**  
+   → 顧客なし、商品なしの注文が処理待ちキューに入る
 
-→ これらは「防げる」問題です
+❌ **支払い済み注文が未払いに戻る**  
+   → Setterで自由に状態変更 → 会計システムで矛盾
+
+❌ **存在しない商品IDで注文作成**  
+   → 在庫チェック時にエラー → 注文処理が停止
+
+❌ **負の残高を持つ口座**  
+   → 残高チェック不備 → 不正出金の発生
+
+❌ **無効な状態遷移**  
+   → 「配送済み」から「準備中」に戻る → 物流システム混乱
+
+→ これらは「防げる」問題です = **設計で解決可能**
 
 ---
 
@@ -62,6 +71,14 @@ order.setAmount(1000);
 // 結果：不完全なオブジェクトが生まれる
 ```
 
+**実際に起こる問題:**
+❌ **必須項目の設定忘れ** → 注文に商品が含まれない  
+❌ **設定順序への依存** → 金額計算が商品設定前に実行される  
+❌ **中途半端な状態での利用** → 検証前にビジネスロジックで使用  
+❌ **ルール適用タイミングが不明確** → いつ、どこで検証するのか？
+
+→ 「作成の責任」が呼び出し側に押し付けられている
+
 ---
 
 ## 状態変化の複雑さ
@@ -70,9 +87,14 @@ order.setAmount(1000);
 **[受取] → [検査] → [荷下ろし] → [配送]**
 
 各状態で：
-• 可能な操作が変わる
-• 必要な情報が変わる  
-• ビジネスルールが変わる
+• **受取状態**: 重量・サイズ測定のみ可能、配送先未確定OK
+• **検査状態**: 内容確認・損傷チェック、配送先必須
+• **荷下ろし状態**: 保管場所割当、配送準備のみ
+• **配送状態**: 位置追跡・配送完了のみ、内容変更不可
+
+**問題**: 各状態の制約を守らずに操作されると？
+❌ 検査前に配送開始 → 損傷品の配送
+❌ 配送中に内容変更 → データ不整合
 
 → この複雑さをどう管理する？
 
@@ -220,9 +242,18 @@ class OrderBuilder {
   }
   
   build(): Order {
-    // 最終検証してからオブジェクト作成
-    this.validateRequired();
+    this.validateRequired(); // 最終検証してからオブジェクト作成
     return new Order(this.order);
+  }
+  
+  private validateRequired(): void {
+    if (!this.order.customerId) {
+      throw new Error("顧客IDは必須です");
+    }
+    if (!this.order.amount || this.order.amount <= 0) {
+      throw new Error("金額は正の値で必須です");
+    }
+    // 他の必須項目チェック...
   }
 }
 ```
@@ -240,7 +271,10 @@ class OrderBuilder {
 
 **⚠️ 制約**  
 • 実装コスト中程度
-• コマンド・クエリ分離違反
+• **コマンド・クエリ分離違反**
+  - メソッドは「変更」または「取得」のどちらか一つの役割に専念すべき
+  - `withCustomer()`は状態変更＋自身を返す（2つの役割）
+  - 副作用が予測しにくくなる可能性
 • 複雑な制約に限界
 
 **適用場面: 任意項目多数、単純な制約**
@@ -270,6 +304,7 @@ class CarBuilder {
   private carType?: 'electric' | 'gasoline';
   private engineSize?: number;
   private batteryCapacity?: number;
+  private hasAWD?: boolean;
   
   electric(): CarBuilder {
     this.carType = 'electric';
@@ -284,9 +319,33 @@ class CarBuilder {
     return this;
   }
   
+  withAWD(): CarBuilder {
+    this.hasAWD = true;
+    return this;
+  }
+  
+  withBattery(capacity: number): CarBuilder {
+    this.batteryCapacity = capacity;
+    return this;
+  }
+  
   build(): Car {
-    this.validateConstraints(); // 複雑な制約チェック
-    return new Car(this.carType!, this.engineSize, this.batteryCapacity);
+    this.validateConstraints();
+    return new Car(this.carType!, this.engineSize, this.batteryCapacity, this.hasAWD);
+  }
+  
+  private validateConstraints(): void {
+    if (!this.carType) throw new Error("車種は必須です");
+    
+    if (this.carType === 'electric') {
+      if (!this.batteryCapacity) throw new Error("電気自動車にはバッテリー容量が必須");
+      if (this.engineSize) throw new Error("電気自動車にエンジンサイズは不要");
+    }
+    
+    if (this.carType === 'gasoline') {
+      if (!this.engineSize) throw new Error("ガソリン車にはエンジンサイズが必須");
+      if (this.batteryCapacity) throw new Error("ガソリン車にバッテリー容量は不要");
+    }
   }
 }
 ```
@@ -385,6 +444,12 @@ class Order {
 
 **定義: データの解釈とルールをそのデータと共に囲い込んで保護すること**
 
+**実践的メリット:**
+• **バグの局所化**: ルール違反が起きる場所を限定
+• **変更の影響範囲縮小**: 内部実装変更が外部に影響しない  
+• **ビジネスルールの一元管理**: 散らばった検証ロジックを統合
+• **テストの簡素化**: 境界が明確で、テストしやすい
+
 **実装方針:**
 ```
 ├── publicなSetterを排除
@@ -458,7 +523,7 @@ class Order {
   
   // ✅ 安全
   getItems(): readonly OrderItem[] {
-    return Collections.unmodifiableList([...this._items]);
+    return Object.freeze([...this._items]); // TypeScriptでの不変リスト
   }
   
   addItem(item: OrderItem): void {
@@ -479,6 +544,10 @@ class Order {
 ## 不変条件による総合保護
 ### 🔍 不変条件（Invariants）による保護
 
+**不変条件とは**: オブジェクトが「正しい状態」にあるために **常に満たすべきルール**
+
+**例**: 銀行口座は「常に残高≥0」「口座番号は10桁」を保つ
+
 ```typescript
 class BankAccount {
   constructor(accountNumber: string, balance: number) {
@@ -489,7 +558,12 @@ class BankAccount {
   
   withdraw(amount: number): void {
     this.balance -= amount;
-    this.checkInvariants(); // 操作後チェック
+    this.checkInvariants(); // 操作後チェック（重要！）
+  }
+  
+  deposit(amount: number): void {
+    this.balance += amount;
+    this.checkInvariants(); // 全ての操作後にチェック
   }
   
   private checkInvariants(): void {
@@ -499,9 +573,12 @@ class BankAccount {
     if (this.accountNumber.length !== 10) {
       throw new Error("口座番号は10桁必須");
     }
+    // ビジネスルールを ここで一元管理
   }
 }
 ```
+
+**ポイント**: 全てのpublicメソッド実行後に必ずチェック → 常に正しい状態を保証
 
 ---
 
