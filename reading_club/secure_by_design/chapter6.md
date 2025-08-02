@@ -6,9 +6,9 @@ style: |
     background: #ffffff;
     color: #2c3e50;
     font-family: 'Segoe UI', 'Yu Gothic UI', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-    padding: 60px;
+    padding: 40px;
     box-shadow: inset 0 0 100px rgba(0,0,0,0.05);
-    line-height: 1.6;
+    line-height: 1.4;
   }
 
   /* ページ番号のスタイル */
@@ -21,9 +21,9 @@ style: |
   /* メインタイトル（h1） */
   h1 {
     color: #2c3e50;
-    font-size: 2.5em;
+    font-size: 1.8em;
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     text-align: center;
     position: relative;
   }
@@ -43,9 +43,9 @@ style: |
   /* セクションタイトル（h2） */
   h2 {
     color: #34495e;
-    font-size: 2em;
+    font-size: 1.4em;
     font-weight: 600;
-    margin: 25px 0 20px 0;
+    margin: 15px 0 10px 0;
     background: linear-gradient(90deg, #3498db, #e74c3c);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -55,32 +55,32 @@ style: |
   /* サブタイトル（h3） */
   h3 {
     color: #7f8c8d;
-    font-size: 1.4em;
+    font-size: 1.1em;
     font-weight: 500;
-    margin: 20px 0 15px 0;
+    margin: 12px 0 8px 0;
   }
 
   /* 本文 */
   p {
-    font-size: 1.1em;
-    line-height: 1.8;
-    margin: 15px 0;
+    font-size: 0.9em;
+    line-height: 1.5;
+    margin: 8px 0;
   }
 
   /* リスト */
   ul, ol {
-    font-size: 1.1em;
-    line-height: 1.8;
-    margin: 20px 0;
-    padding-left: 20px;
+    font-size: 0.85em;
+    line-height: 1.4;
+    margin: 10px 0;
+    padding-left: 15px;
   }
 
   li {
-    margin: 8px 0;
-    padding: 8px 15px;
+    margin: 4px 0;
+    padding: 6px 10px;
     background: #f8f9fa;
-    border-left: 4px solid #3498db;
-    border-radius: 0 5px 5px 0;
+    border-left: 3px solid #3498db;
+    border-radius: 0 3px 3px 0;
     list-style: none;
   }
 
@@ -96,11 +96,12 @@ style: |
 
   pre {
     background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 10px;
+    border-radius: 6px;
     border: 1px solid #dee2e6;
     overflow-x: auto;
-    margin: 20px 0;
+    margin: 10px 0;
+    font-size: 0.7em;
   }
 
   /* 引用 */
@@ -117,15 +118,16 @@ style: |
   table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: 10px 0;
     background: #ffffff;
-    border-radius: 8px;
+    border-radius: 6px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    font-size: 0.75em;
   }
 
   th, td {
-    padding: 12px 15px;
+    padding: 6px 8px;
     text-align: left;
     border-bottom: 1px solid #dee2e6;
   }
@@ -160,8 +162,8 @@ style: |
   }
 
   section.title-slide h1 {
-    font-size: 3.5em;
-    margin-bottom: 20px;
+    font-size: 2.5em;
+    margin-bottom: 15px;
     color: white;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
   }
@@ -172,17 +174,17 @@ style: |
   }
 
   section.title-slide h2 {
-    font-size: 1.8em;
+    font-size: 1.3em;
     color: #f0f8ff;
     font-weight: 400;
-    margin-top: 30px;
+    margin-top: 20px;
     background: none;
     -webkit-text-fill-color: #f0f8ff;
   }
 
   section.title-slide p {
-    font-size: 1.3em;
-    margin-top: 20px;
+    font-size: 1.0em;
+    margin-top: 15px;
     color: #e6f3ff;
   }
 
@@ -214,8 +216,8 @@ style: |
   }
 
   section.section-divider h1 {
-    font-size: 4em;
-    margin-bottom: 30px;
+    font-size: 2.8em;
+    margin-bottom: 20px;
     color: white;
     text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
     z-index: 1;
@@ -229,10 +231,10 @@ style: |
   }
 
   section.section-divider h2 {
-    font-size: 1.5em;
+    font-size: 1.1em;
     color: #bdc3c7;
     font-weight: 300;
-    margin-top: 20px;
+    margin-top: 15px;
     background: none;
     -webkit-text-fill-color: #bdc3c7;
     z-index: 1;
@@ -241,9 +243,9 @@ style: |
 
   section.section-divider .section-number {
     position: absolute;
-    top: 50px;
-    right: 50px;
-    font-size: 8em;
+    top: 30px;
+    right: 30px;
+    font-size: 5em;
     font-weight: 900;
     color: rgba(255,255,255,0.1);
     z-index: 0;
@@ -284,24 +286,25 @@ style: |
 
   /* 大きめのテキスト用 */
   section.large-text {
-    font-size: 1.3em;
+    font-size: 1.0em;
   }
 
   section.large-text h1 {
-    font-size: 3em;
+    font-size: 2.2em;
   }
 
   section.large-text h2 {
-    font-size: 2.3em;
+    font-size: 1.6em;
   }
 
   /* ハイライト要素 */
   .highlight {
     background: linear-gradient(120deg, #f39c12 0%, #f1c40f 100%);
     color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
+    padding: 3px 6px;
+    border-radius: 3px;
     font-weight: 600;
+    font-size: 0.9em;
   }
 
   .emphasis {
@@ -311,11 +314,11 @@ style: |
 
   .note {
     background: #ecf0f1;
-    border-left: 4px solid #3498db;
-    padding: 10px 15px;
-    border-radius: 0 5px 5px 0;
-    font-size: 0.9em;
-    margin: 15px 0;
+    border-left: 3px solid #3498db;
+    padding: 6px 10px;
+    border-radius: 0 3px 3px 0;
+    font-size: 0.75em;
+    margin: 8px 0;
   }
 ---
 
@@ -323,68 +326,88 @@ style: |
 <!-- _class: title-slide -->
 <!-- _paginate: false -->
 
-## 状態の完全性(integrity)の保証
+# 状態の完全性（Integrity）の保証
+## 〜エンティティを正しく作り、正しく保つ〜
 
 **発表者名** : 松原翔人
 
 ---
 
-<!-- 目次スライド -->
-# 目次
+# ゴール
+## この発表で得られるもの
 
-1. **はじめに**
-2. **背景・課題**
-3. **提案・解決策**
-4. **結果・効果**
-5. **まとめ・今後の展望**
+
+1. **エンティティの状態管理における課題の理解**
+2. **段階的なセキュリティ強化手法の習得**（抽象的かも）
+3. **実践パターンの使い分けスキル**
+4. **明日から使える具体的なコード例**
 
 ---
 
-<!-- セクション1の扉 -->
+# 目次
+
+
+1. **なぜ状態管理が重要なのか**
+2. **正しい状態のエンティティの作り方**
+3. **エンティティの完全性**
+4. **総合的な保護戦略**
+
+---
+
 <!-- _class: section-divider -->
 <!-- _paginate: false -->
 
-# はじめに
-## Introduction
+# 問題定義
 
 <div class="section-number">01</div>
 
 ---
 
-<!-- セクション1の内容 -->
-# プロジェクトの概要
+# DDDにおける状態管理の位置付け
 
-## 背景
+### エンティティ
+- 識別性(Identity)を持つ
+- ライフサイクルを通じて追跡される（よくわからん）
+- ↑ **常に整合性を保つ必要がある** ← 今日のテーマ
 
-- **課題の発見**: 現状分析により明らかになった問題点
-- **目的の設定**: 解決すべき具体的な目標
-- **アプローチ**: 採用した手法とその理由
-
-## 重要なポイント
-
-<div class="highlight">重要な情報はハイライトで強調</div>
-
-<div class="note">
-補足説明や注意事項はノートボックスで表示
-</div>
+<div class="highlight">状態の破綻 = ビズネス価値の毀損</div>
 
 ---
 
-# 詳細な分析結果
+# よくある問題シナリオ
 
-<!-- _class: two-columns -->
+- ❌ 空の注文オブジェクトが作られる
+- ❌ 支払い済み注文が未払いに戻る
+- ❌ 存在しない商品IDで注文作成
+- ❌ 負の残高を持つ口座
+- ❌ 無効な状態遷移
 
-## 定量分析
+<div class="emphasis">これらは「防げる」問題</div>
 
-- 数値データに基づく分析
-- 統計的な有意性の確認
-- トレンドの把握と予測
+---
 
-## 定性分析
+# レガシーな「引数なしコンストラクタ」
 
-- ユーザーインタビュー結果
-- 観察による洞察
-- 専門家の意見
+## 「空っぽの箱を先に作って、後から中身を詰める方式」
+###  　　↑使う価値なし
+
+<img src="./imgs/image_1.png" width="600">
+
+---
+具体的なソースコード
+
+---
+# 状態変化の複雑さ
+
+<img src="./imgs/image_2.png" width="400">
+
+- 各状態で**可能な操作**、**必要な情報**、**ビジネスルール**が変わる
+
+---
+
+# エンティティによる状態管理
+
+
 
 ---
 
@@ -417,15 +440,15 @@ style: |
 
 ---
 
-# 課題の詳細分析
+# 正しいエンティティ作成のアプローチ
 
-| 項目 | 現状 | 目標 | ギャップ |
+| 手法 | 適用ケース | メリット | デメリット |
 |------|------|------|----------|
-| 処理時間 | 120分 | 60分 | -50% |
-| エラー率 | 5.2% | 1.0% | -4.2% |
-| コスト | ¥1,200万 | ¥800万 | -¥400万 |
+| 必須情報を全てコンストラクタ引数 | シンプルなエンティティ | 確実性 | 引数が多いと複雑 |
+| フルーエントインターフェース | 任意フィールドが多い | 可読性 | 複数フィールド制約に対応困難 |
+| ビルダーパターン | 複雑な制約あり | 柔軟性 | 実装が複雑 |
 
-<div class="emphasis">重要：すべての指標で改善が必要</div>
+<div class="emphasis">目標：作成されるオブジェクトは全てビジネスルールを満たしていることを保証</div>
 
 ---
 
@@ -433,68 +456,116 @@ style: |
 <!-- _class: section-divider -->
 <!-- _paginate: false -->
 
-# 提案・解決策
-## Proposal & Solutions
+# 実践的な設計パターン
+## Practical Design Patterns
 
 <div class="section-number">03</div>
 
 ---
 
-# 解決策の概要
+# ビルダーパターンの活用
 
 <!-- _class: large-text -->
 
-## 3つの柱
+## 基本的な考え方
 
-1. **プロセスの自動化**
-2. **品質管理の強化**  
-3. **コスト最適化**
+1. **複雑な制約をビルダー内で隠蔽**
+2. **オブジェクト作成完了まで外部アクセス禁止**  
+3. **フルーエントインターフェースとの組み合わせ**
 
 ---
 
-# 実装計画
+# フルーエントインターフェースの特徴
 
 <!-- _class: three-columns -->
 
-## フェーズ1
-**基盤構築**
-- システム設計
-- 要件定義
-- 開発環境構築
+## メリット
+**可読性の向上**
+- 自然言語のようなコード
+- メソッドチェーンによる流暢性
+- 理解しやすいAPI
 
-## フェーズ2
-**機能開発**
-- 核心機能の実装
-- テスト実施
-- 性能最適化
+## デメリット
+**制約の問題**
+- コマンド・クエリ分離原則違反
+- 複数フィールド制約対応困難
+- 不完全な状態の可能性
 
-## フェーズ3
-**展開・運用**
-- 本格運用開始
-- 効果測定
-- 継続改善
+## 解決策
+**ビルダーパターン**
+- 複雑な制約の隠蔽
+- 完成まで外部アクセス禁止
+- 内部クラスでの実装
 
 ---
 
-# 技術的アプローチ
+# TypeScriptでのビルダーパターン実装
 
-## 採用技術
+## Carエンティティの例
 
-```python
-# サンプルコード例
-def process_optimization():
-    """プロセス最適化の実装例"""
-    efficiency = calculate_efficiency()
-    if efficiency < threshold:
-        apply_automation()
-    return optimized_result
+```typescript
+class Car {
+  private constructor(
+    private readonly brand: string,
+    private readonly isElectric: boolean,
+    private readonly engineSize?: number
+  ) {
+    this.validateInvariants();
+  }
+
+  static builder(): CarBuilder {
+    return new CarBuilder();
+  }
+
+  private validateInvariants(): void {
+    if (this.isElectric && this.engineSize) {
+      throw new Error('電気自動車にエンジンサイズは設定できません');
+    }
+  }
+
+  getBrand(): string { return this.brand; }
+  isElectricVehicle(): boolean { return this.isElectric; }
+  getEngineSize(): number | undefined { return this.engineSize; }
+}
+
+class CarBuilder {
+  private brand?: string;
+  private isElectric: boolean = false;
+  private engineSize?: number;
+
+  setBrand(brand: string): CarBuilder {
+    this.brand = brand;
+    return this;
+  }
+
+  setElectric(): CarBuilder {
+    this.isElectric = true;
+    this.engineSize = undefined; // 電気車はエンジンサイズなし
+    return this;
+  }
+
+  setEngineSize(size: number): CarBuilder {
+    if (this.isElectric) {
+      throw new Error('電気自動車にエンジンサイズは設定できません');
+    }
+    this.engineSize = size;
+    return this;
+  }
+
+  build(): Car {
+    if (!this.brand) {
+      throw new Error('ブランドは必須です');
+    }
+    return new Car(this.brand, this.isElectric, this.engineSize);
+  }
+}
 ```
 
 ## 期待される効果
 
-- **処理速度**: <span class="highlight">50%向上</span>
-- **精度**: <span class="highlight">95%以上</span>
-- **コスト削減**: <span class="highlight">30%減</span>
+- **安全性**: <span class="highlight">不正な状態のオブジェクト作成を防止</span>
+- **保守性**: <span class="highlight">制約をコードで明示的に表現</span>
+- **可読性**: <span class="highlight">ビジネスルールの可視化</span>
 
 ---
 
@@ -502,40 +573,40 @@ def process_optimization():
 <!-- _class: section-divider -->
 <!-- _paginate: false -->
 
-# 結果・効果
-## Results & Impact
+# エンティティの完全性保護
+## Entity Integrity Protection
 
 <div class="section-number">04</div>
 
 ---
 
-# 実装結果
+# カプセル化と完全性保護
 
-## 定量的成果
+## Getter/Setterの問題点
 
-- ✅ **処理時間**: 120分 → 58分（52%改善）
-- ✅ **エラー率**: 5.2% → 0.8%（85%改善）
-- ✅ **運用コスト**: ¥1,200万 → ¥780万（35%削減）
+- ❗ **public setterの危険性**: データフィールドがprivateでも外部から自由に変更可能
+- ❗ **ビジネスルールを無視**: 制約をスキップして状態変更
+- ❗ **一貫性の破綱**: 状態管理ロジックが分散
 
-## 定性的成果
+## 解決策
 
-- **チーム満足度の向上**
-- **顧客からの評価改善**
-- **業務の標準化推進**
+- **一方向の変更メソッド**: `setPaid()`ではなく`markPaid()`
+- **ドメインプリミティブの活用**: 不変オブジェクトで安全な共有
+- **カプセル化**: データとルールを同じ場所で管理
 
 ---
 
-# 成果の可視化
+# コレクションの完全性保護
 
 <!-- _class: center -->
 
-## Before vs After
+## コレクションの問題と対策
 
-| **指標** | **導入前** | **導入後** | **改善率** |
+| **問題** | **危険性** | **対策** | **効果** |
 |----------|------------|------------|------------|
-| 効率性 | 📊 ▓▓▓░░ | 📊 ▓▓▓▓▓ | +40% |
-| 品質 | 📊 ▓▓░░░ | 📊 ▓▓▓▓░ | +80% |
-| 満足度 | 📊 ▓▓▓░░ | 📊 ▓▓▓▓▓ | +67% |
+| 内部Listを直接返す | 🚫 外部から変更可能 | 読み取り専用ビュー返却 | ✅ 安全性向上 |
+| SetterでList一括設定 | 🚫 ビジネスルールスキップ | エンティティ内でのみ操作 | ✅ ルール遵守 |
+| 可変オブジェクト共有 | 🚫 意図しない変更 | Collections.unmodifiableList | ✅ 不変性保証 |
 
 ---
 
@@ -543,45 +614,45 @@ def process_optimization():
 <!-- _class: section-divider -->
 <!-- _paginate: false -->
 
-# まとめ・今後の展望
-## Summary & Future Vision
+# まとめ・重要なポイント
+## Summary & Key Points
 
 <div class="section-number">05</div>
 
 ---
 
-# 主要な成果
+# 状態完全性保証の核心原則
 
 <!-- _class: center -->
 
-## プロジェクトの成功要因
+## 3つの柱
 
-<div class="highlight">適切な計画 + 段階的実装 + 継続的改善</div>
+<div class="highlight">正しい状態での生成 + 完全性の保護 + 適切な設計パターン</div>
 
-### 学んだ教訓
+### 重要なポイント
 
-1. **ステークホルダーとの密な連携**
-2. **データドリブンな意思決定**
-3. **柔軟性を保った実装**
+1. **エンティティによる状態管理の一元化**
+2. **ビジネスルールをコードで表現**
+3. **不変条件の維持とカプセル化**
 
 ---
 
-# 今後の展望
+# 実践での選択指針
 
-## 短期的な計画（3-6ヶ月）
+## シンプルなケース
 
-- 追加機能の開発
-- 他部署への展開検討
-- 効果測定の継続
+- 必須情報を全てコンストラクタ引数に
+- 任意情報はSetterメソッドで設定
+- コンストラクタ内でnullチェック実施
 
-## 長期的なビジョン（1-2年）
+## 複雑な制約があるケース
 
-- 全社展開の実現
-- 新技術の導入検討
-- 業界標準化への貢献
+- ビルダーパターンの採用
+- 内部クラスでのカプセル化
+- フルーエントインターフェースとの組み合わせ
 
 <div class="note">
-継続的な改善とイノベーションが成功の鍵
+ビルダーの生存期間は短く、一度のリクエスト内で完結させる
 </div>
 
 ---
@@ -611,20 +682,58 @@ def process_optimization():
 
 ---
 
-# 参考文献・データソース
+# 追加のTypeScriptコード例
 
-## 文献
+## コレクションの安全な取り扱い
 
-1. 研究論文タイトル（著者名、年）
-2. 業界レポート（発行機関、年）
-3. 技術文書（組織名、年）
+```typescript
+class Order {
+  private orderItems: OrderItem[] = [];
 
-## データソース
+  // 外部に直接Listを渡さない
+  getOrderItems(): readonly OrderItem[] {
+    return Object.freeze([...this.orderItems]);
+  }
 
-- 社内データベース
-- 業界統計
-- 公開データセット
+  // エンティティ内でのみ操作を許可
+  addOrderItem(item: OrderItem): void {
+    if (this.orderItems.length >= 10) {
+      throw new Error('注文アイテムは10個までです');
+    }
+    this.orderItems.push(item);
+  }
+
+  removeOrderItem(itemId: string): boolean {
+    const index = this.orderItems.findIndex(item => item.getId() === itemId);
+    if (index >= 0) {
+      this.orderItems.splice(index, 1);
+      return true;
+    }
+    return false;
+  }
+
+  getTotalAmount(): number {
+    return this.orderItems.reduce((sum, item) => sum + item.getPrice(), 0);
+  }
+}
+
+class OrderItem {
+  constructor(
+    private readonly id: string,
+    private readonly name: string,
+    private readonly price: number
+  ) {
+    if (price <= 0) {
+      throw new Error('価格は0より大きい値である必要があります');
+    }
+  }
+
+  getId(): string { return this.id; }
+  getName(): string { return this.name; }
+  getPrice(): number { return this.price; }
+}
+```
 
 <div class="note">
-すべての数値とグラフは2025年7月時点のデータに基づく
+セキュア・バイ・デザイン 第6章「状態の完全性の保証」より
 </div>
