@@ -18,43 +18,104 @@ paginate: true
 
 ---
 
-# 🔥 第1部: 問題提起
+# エンティティを使った状態管理
 
 ---
 
-## 状態管理の重要性
-### 🎯 DDDにおける状態管理の位置づけ
+# システムの中心の関心事
 
-**エンティティ = ドメインの核心概念**
-```
-├── アイデンティティを持つ
-├── ライフサイクルを通じて追跡される
-└── 📍 常に整合性を保つ必要がある ← 今日のテーマ
-```
-
-**状態の破綻 = ビジネス価値の毀損**
+**状態の変化** に伴いシステムの **振る舞いがどう変わるか**
 
 ---
 
-## よくある問題シナリオ
-### 🚨 現実でよく見る問題
+## 2つの完全性
 
-❌ **空の注文オブジェクトが作られる**  
-   → 顧客なし、商品なしの注文が処理待ちキューに入る
+**1️⃣ 作成時の完全性**  
+   - 「正しい状態で生まれる」
 
-❌ **支払い済み注文が未払いに戻る**  
-   → Setterで自由に状態変更 → 会計システムで矛盾
+**2️⃣ 実行時の完全性**  
+   - 「正しい状態を維持する」
 
-❌ **存在しない商品IDで注文作成**  
-   → 在庫チェック時にエラー → 注文処理が停止
+→ **両方が揃って初めて安全**
 
-❌ **負の残高を持つ口座**  
-   → 残高チェック不備 → 不正出金の発生
+---
 
-❌ **無効な状態遷移**  
-   → 「配送済み」から「準備中」に戻る → 物流システム混乱
+## 荷物管理システムの例
 
-→ これらは「防げる」問題です = **設計で解決可能**
+<img src="./imgs/image_1.png" alt="荷物管理システムでの状態変化を示した図" width="1000">
+
+--- 
+
+<img src="./imgs/image_2.png"　alt="荷物管理システムでの状態変化と各状態での制約を示した" width="1200">
+
+--- 
+
+## 問題
+- 各状態の制約を守らずに操作されると？
+  - ❌ 検査前に配送開始 → 損傷品の配送
+  - ❌ 配送中に内容変更 → データ不整合
+
+→ この複雑さをどう管理する？
+
+---
+
+# 状態管理のごちゃ混ぜ問題
+荷物の状態変更が**複数の方法**で行われ、それぞれ異なるルールが適用される。←❌
+
+---
+
+<img src="./imgs/image_4.png" width="900">
+
+---
+
+# エンティティを使った状態の管理
+
+---
+
+## ちょっとおさらい
+<img src="./imgs/image_3.png" alt="エンティティの説明" width="800">
+
+---
+
+## エンティティによるモデリング（効果的）
+
+- **状態変化→エンティティが扱うようモデリング**する
+<img src="./imgs//image_5.png" width="800">
+
+---
+
+# 正しい状態のエンティティを作成する方法
+
+---
+
+## なぜ「正しい状態での作成」が重要なのか
+**ビジネスルールを守っていないエンティティ** = **セキュリティーホール**
+
+```ts
+// 危険な例
+const transfer = new BankTransfer();
+transfer.setFromAccount(""); // 空の送金元
+transfer.setAmount(-1000); // 負の金額
+transfer.execute(); // → システムに重大な脆弱性
+```
+
+---
+
+## 実際に起こりうる問題
+
+- ❌不正送金の実行
+- ❌データ整合性の破綻
+- ❌認証しかと
+
+---
+
+## 本書での基本原則
+
+**全てのエンティティが生まれた時から正しい状態でなくてはならない**
+
+## エンティティ = ドメインの守護者
+- ビジネスルール違反を**物理的に不可能**にする
+- セキュリティを**設計段階**で組み込む
 
 ---
 
@@ -83,140 +144,63 @@ order.setAmount(1000);
 
 ---
 
-## 状態変化の複雑さ
-### 📊 荷物管理システムの例
+## 正しい初期状態を作る3つの方法
 
-**[受取] → [検査] → [荷下ろし] → [配送]**
-
-<img src="./imgs/image_2.png" width="500">
-
---- 
-
-各状態で
-- **受取状態**
-  - 重量・サイズ測定のみ可能、配送先未確定OK
-- **検査状態**
-  - 内容確認・損傷チェック、配送先必須
-- **荷下ろし状態**
-  - 保管場所割当、配送準備のみ
-- **配送状態**
-  - 位置追跡・配送完了のみ、内容変更不可
-
---- 
-
-## 問題
-- 各状態の制約を守らずに操作されると？
-  - ❌ 検査前に配送開始 → 損傷品の配送
-  - ❌ 配送中に内容変更 → データ不整合
-
-→ この複雑さをどう管理する？
-
----
-
-## エンティティによる状態管理
-### 💡 DDDの解決アプローチ
-
-**状態変化をエンティティでモデリング**
-
-- 状態についての理解
-- 状態変化のルール  
-- 変化の制御
-
-**を同じ場所で管理 → カプセル化の威力**
-
----
-
-## 2つの完全性
-### 🛡️ 今日扱う2つの完全性
-
-**1️⃣ 作成時の完全性**  
-   - 「正しい状態で生まれる」
-
-**2️⃣ 実行時の完全性**  
-   - 「正しい状態を維持する」
-
-→ **両方が揃って初めて安全**
-
----
-
-# エンティティを使った状態の管理
-
----
-
-## システムにとっての中心となる関心事
-- **状態の変化**に伴いシステムの**振る舞いがどう変わるか**
-- 状態の変化を把握、**全ての変化に対して適切なルールが適用されることを保証**（**必須**）
-
----
-
-## DDDのエンティティとしてモデリング
-
-- **状態の変化をDDDのエンティティとしてモデリングすること**が良い
-- エンティティ
-  - 変わることのない識別性（Identity）
-  - 生存期間中、何度も状態が変わる
-- 状態の変化を扱うのは**エンティティ**が**最適**
-
----
-
-## エンティティによるモデリング（効果的）
-
-- **状態変化→エンティティが扱うようモデリング**する
-- メリット
-  - **状態についての理解**
-  - **その状態がどのように変わるのか**
-  - を**同じ場所で収集**できる
-
----
-
-# 🔧 第2部: 正しい初期状態の作り方
-
----
-
-## 4つのアプローチ概観
-### 🏗️ 正しい初期状態を作る4つの方法
-
-**1️⃣ 必須情報をコンストラクタで（基本）**  
-**2️⃣ フルーエント・インターフェース（可読性）**  
-**3️⃣ ビルダー・パターン（複雑性対応）**  
-**4️⃣ 複合アプローチ（実際の選択）**
+**1️⃣ 全ての必須の情報をコンストラクタの引数とする**  
+**2️⃣ フルーエント・インターフェース**  
+**3️⃣ ビルダー・パターン**
 
 → 段階的に複雑さに対応
+
+---
+
+# 全ての必須の情報をコンストラクタの引数とする
 
 ---
 
 ## 全ての必須の情報をコンストラクタの引数とする
 
 ```typescript
-class Order {
-  constructor(
-    customerId: string,
-    amount: number,
-    items: OrderItem[]
-  ) {
-    if (!customerId) throw new Error("顧客ID必須");
-    if (amount <= 0) throw new Error("金額は正の値");
-    // 即座にビジネスルールを適用
+class SecureOrder {
+  private readonly customerId: string;
+  private readonly amount: number;
+  private readonly items: readonly OrderItem[];
+
+  constructor(customerId: string, amount: number, items: OrderItem[]) {
+    // 🛡️ 作成時にセキュリティルールを強制適用
+    if (!customerId || customerId.length < 3) {
+      throw new Error("不正な顧客ID");
+    }
+    if (amount <= 0 || amount > 1000000) {
+      throw new Error("金額が許可範囲外");
+    }
+    if (!items || items.length === 0) {
+      throw new Error("注文項目は必須");
+    }
+
+    this.customerId = customerId;
+    this.amount = amount;
+    this.items = Object.freeze([...items]); // 不変性確保
   }
+
+  ...
 }
 ```
 
-**メリット: シンプル、確実、高速**
+**メリット**
+シンプル、確実、高速
 
 ---
 
-## 特徴
+## メリット
+- 学習コスト低
+- 実装が簡単
+- コンパイル時チェック
 
-- **✅ メリット**
-  - 学習コスト低
-  - 実装が簡単
-  - コンパイル時チェック
-  - パフォーマンス良好
-
-- **⚠️ 制約**
-  - 引数が多いと複雑
-  - 任意項目の扱いが難しい
-  - 柔軟性に限界
+## 制約
+- 引数が多いと複雑
+- 任意項目の扱いが難しい
+- 柔軟性に限界
 
 --- 
 
@@ -225,8 +209,40 @@ class Order {
 
 ---
 
-## フルーエント・インターフェース
+# フルーエント・インターフェース
 
+---
+
+```typescript
+class Order {
+  private customerId?: string;
+  private amount?: number;
+  private priority?: string;
+  private deliveryDate?: Date;
+
+  withCustomer(customerId: string): Order {
+    if (!customerId || customerId.length < 3) {
+      throw new Error("不正な顧客ID");
+    }
+    this.customerId = customerId;
+    return this; // 🔗 チェーン可能にする
+  }
+
+  withAmount(amount: number): Order {
+    if (amount <= 0 || amount > 1000000) {
+      throw new Error("金額が許可範囲外");
+    }
+    this.amount = amount;
+    return this;
+  }
+
+  ...
+
+}
+
+```
+
+---
 ```typescript
 const order = new Order()
   .withCustomer("CUST-123")
@@ -235,36 +251,11 @@ const order = new Order()
   .withDeliveryDate(tomorrow)
 ```
 
-- **メリット**
-  - 可読性、自然言語的、段階的構築
+流れるような自然な記述
 
 ---
 
-## フルーエント実装例
-
-```typescript
-class Order {
-  private order: Partial<Order> = {};
-  
-  withCustomer(id: string): Order {
-    this.order.customerId = id;
-    return this; // 自身を返してチェーン可能に
-  }
-  
-  withAmount(amount: number): Order {
-    this.order.amount = amount;
-    return this;
-  }
-
-  ...
-}
-```
-
----
-
-## フルーエントの特徴
-
-- **✅ メリット**
+## メリット
   - 高い可読性
   - 自然な記述
   - 段階的な構築
@@ -272,82 +263,64 @@ class Order {
 
 --- 
 
-- **⚠️ 制約**  
-  - 実装コスト中程度
-  - **コマンド・クエリ分離違反**
-    - メソッドは「変更」または「取得」のどちらか一つの役割に専念すべき
-    - `withCustomer()`は状態変更＋自身を返す（2つの役割）
-    - 副作用が予測しにくくなる可能性
-  - 複雑な制約に限界
+## 制約  
+- 実装コスト中程度
+- **コマンド・クエリ分離違反**
+  - メソッドは「変更」または「取得」のどちらか一つの役割に専念すべき
+  - `withCustomer()`は状態変更＋自身を返す（2つの役割）
+  - 副作用が予測しにくくなる可能性
+- 複雑な制約に限界
 
-- **適用場面**
-  - 任意項目多数、単純な制約
-
----
-
-##  ビルダー・パターン
-
-```typescript
-// 複雑な制約例：車の設定
-const car = new CarBuilder()
-  .electric()        // 電気自動車選択
-  .withAWD()        // AWD設定
-  .withBattery(100) // バッテリー容量
-  .build();         // エンジンサイズは自動で除外
-```
-
-**複雑な相互依存関係を内部で制御**
+## 適用場面
+- 任意項目多数、単純な制約
 
 ---
 
-## ビルダー実装例
+#  ビルダー・パターン
+
+---
 
 ```typescript
 class CarBuilder {
-  private carType?: 'electric' | 'gasoline';
+  private carType?: 'electric' | 'gasoline' | 'hybrid';
   private engineSize?: number;
   private batteryCapacity?: number;
   private hasAWD?: boolean;
-  
+
   electric(): CarBuilder {
     this.carType = 'electric';
-    this.engineSize = undefined; // 自動でエンジン除外
+    this.engineSize = undefined; // 🔒 自動でエンジン除外
     return this;
   }
-  
+
   gasoline(engineSize: number): CarBuilder {
+    if (engineSize <= 0 || engineSize > 8000) {
+      throw new Error("エンジンサイズが範囲外");
+    }
     this.carType = 'gasoline';
     this.engineSize = engineSize;
-    this.batteryCapacity = undefined; // バッテリー除外
+    this.batteryCapacity = undefined; // 🔒 バッテリー除外
     return this;
   }
-  
-  withAWD(): CarBuilder {
-    this.hasAWD = true;
-    return this;
-  }
-  
-  withBattery(capacity: number): CarBuilder {
-    this.batteryCapacity = capacity;
-    return this;
-  }
-  
+
+  ...
+
   build(): Car {
-    this.validateConstraints();
+    this.validateAllConstraints(); // 🛡️ 最終検証
     return new Car(this.carType!, this.engineSize, this.batteryCapacity, this.hasAWD);
   }
-  
-  private validateConstraints(): void {
-    if (!this.carType) throw new Error("車種は必須です");
+
+  private validateAllConstraints(): void {
+    if (!this.carType) throw new Error("車種は必須");
     
     if (this.carType === 'electric') {
-      if (!this.batteryCapacity) throw new Error("電気自動車にはバッテリー容量が必須");
-      if (this.engineSize) throw new Error("電気自動車にエンジンサイズは不要");
+      if (!this.batteryCapacity) throw new Error("電気自動車にはバッテリー必須");
+      if (this.engineSize) throw new Error("電気自動車にエンジンは不要");
     }
     
     if (this.carType === 'gasoline') {
-      if (!this.engineSize) throw new Error("ガソリン車にはエンジンサイズが必須");
-      if (this.batteryCapacity) throw new Error("ガソリン車にバッテリー容量は不要");
+      if (!this.engineSize) throw new Error("ガソリン車にはエンジン必須");
+      if (this.batteryCapacity) throw new Error("ガソリン車にバッテリーは不要");
     }
   }
 }
@@ -355,10 +328,31 @@ class CarBuilder {
 
 ---
 
-## ビルダーの特徴
-### 📊 ビルダー・パターンの評価
+## 使用例
 
-- **✅ メリット**
+```typescript
+// ✅ 電気自動車の作成
+const electricCar = new CarBuilder()
+  .electric()        // 電気自動車選択（自動でエンジン除外）
+  .withBattery(100)  // バッテリー容量設定
+  .withAWD()         // AWD設定
+  .build();          // 🛡️ 最終検証して作成
+
+// ✅ ガソリン車の作成
+const gasolineCar = new CarBuilder()
+  .gasoline(2000)    // ガソリン車選択（自動でバッテリー除外）
+  .build();
+
+// ❌ 不正な組み合わせは build() 時点で阻止
+const invalidCar = new CarBuilder()
+  .electric()
+  .gasoline(1800)    // 上書きされる
+  .build();          // エラー：制約違反
+```
+
+---
+
+## メリット
   - 複雑な制約に対応
   - 段階的検証
   - 高い型安全性
@@ -366,18 +360,17 @@ class CarBuilder {
 
 ---
 
-- **⚠️ 制約**
+## 制約
   - 実装コスト高
   - 学習コスト高
   - オーバーヘッド
 
-- **適用場面**
+## 適用場面
   - 複雑な相互依存、段階的構築必要
 
 ---
 
 ## パターン選択指針
-### 🎯 どのパターンを選ぶべきか？
 
 | 条件 | 推奨パターン | 理由 |
 |------|-------------|------|
