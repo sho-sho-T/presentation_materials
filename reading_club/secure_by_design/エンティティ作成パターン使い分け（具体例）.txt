@@ -1,0 +1,96 @@
+🛒 ECサイトでの判断根拠
+Product（商品）→ コンストラクタ
+typescriptclass Product {
+  constructor(id: string, name: string, price: number) {
+    // 商品の基本情報は単純
+  }
+}
+理由:
+
+商品の基本情報は固定的（ID、名前、価格）
+大量に作成される（商品カタログ全体）
+シンプルな制約（価格は正の数等）
+高速な検索・表示が必要
+
+Order（注文）→ フルーエント
+typescriptconst order = new Order()
+  .withCustomer(customer)
+  .withShippingAddress(address)    // 任意：ギフト配送時のみ
+  .withPaymentMethod("credit")     // 任意：複数選択肢
+  .withGiftWrap(true)             // 任意：ギフト時のみ
+  .withDeliveryTime("morning")     // 任意：時間指定
+  .withMessage("Happy Birthday!");  // 任意：メッセージカード
+理由:
+
+任意項目が非常に多い（配送先、支払方法、ギフト設定等）
+ユーザビリティ重視（注文フローの分かりやすさ）
+項目間の依存は軽微（ギフト設定は独立している）
+段階的な入力が自然（ショッピングカートの流れ）
+
+Campaign（キャンペーン）→ ビルダー
+typescriptclass CampaignBuilder {
+  // 🤯 超複雑な条件設定
+  build(): Campaign {
+    // 期間の重複チェック
+    // 対象商品の在庫確認
+    // 割引率の妥当性検証
+    // 予算との整合性確認
+    // 他キャンペーンとの競合チェック
+  }
+}
+理由:
+
+複雑なビジネスルール（期間、対象、条件の組み合わせ）
+多数の項目間制約（予算vs割引率、期間vs在庫等）
+マーケティング戦略に直結（間違いが売上に直撃）
+柔軟な設定が必要（A/Bテスト等）
+
+
+🏥 医療システムでの判断根拠
+Patient（患者）→ コンストラクタ
+typescriptclass Patient {
+  constructor(id: string, name: string, birthDate: Date) {
+    // 患者の基本情報は変わらない
+  }
+}
+理由:
+
+基本情報は固定的（ID、名前、生年月日）
+医療法での要求事項（患者識別の確実性）
+高頻度でアクセス（診療のたびに参照）
+シンプルで確実性重視
+
+Prescription（処方箋）→ ビルダー
+typescriptclass PrescriptionBuilder {
+  build(): Prescription {
+    // 🚨 生命に関わる複雑チェック
+    this.checkDrugInteractions();     // 薬剤相互作用
+    this.checkAllergies();            // アレルギー反応
+    this.checkDosageLimits();         // 投与量限界
+    this.checkContraindications();    // 禁忌事項
+    this.checkPregnancySafety();      // 妊娠時安全性
+  }
+}
+理由:
+
+生命に関わる制約（薬剤相互作用は致命的）
+法的責任が重い（医療過誤のリスク）
+超複雑な医学的ルール（数千の薬剤の組み合わせ）
+段階的な安全確認が必要
+
+Appointment（予約）→ フルーエント
+typescriptconst appointment = new Appointment()
+  .withDoctor(doctor)
+  .withDate(date)
+  .withDepartment("内科")          // 任意：総合診療の場合
+  .withUrgency("regular")          // 任意：緊急度
+  .withNotes("頭痛が続いている");    // 任意：症状メモ
+理由:
+
+設定項目が多様（医師、診療科、時間、症状等）
+患者の利便性重視（予約の取りやすさ）
+項目間の依存は中程度（医師と診療科は関連するが複雑ではない）
+
+
+🎯 選択基準のまとめ
+要因コンストラクタフルーエントビルダー制約の複雑さシンプル中程度複雑項目数少ない多い（任意中心）多い（必須・任意混在）安全性要求中〜高中最高使用頻度高頻度中頻度低頻度ユーザビリティ重要でない重要重要でない
