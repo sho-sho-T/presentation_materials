@@ -35,21 +35,6 @@ style: |
 
 ---
 
-<!-- _class:  -->
-
-# 🚨 危険なコードクイズ
-
-```typescript
-const transfer = new BankTransfer();
-    transfer.setAmount(request.body.amount);
-    transfer.setFromAccount(request.body.from);
-    transfer.execute();
-```
-
-**このコードの何が危険？**
-
----
-
 # 🎯 本日のゴール
 
 ## 学習目標
